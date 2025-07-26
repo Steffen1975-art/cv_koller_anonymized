@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lebenslauf - Anonym</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root { 
+            --primary-color: #0070D2; 
+            --text-dark: #001639; 
+            --text-light: #495057; 
+            --bg-light: #f8f9fa; 
+            --line-color: #dee2e6;
+            --timeline-line-color: #ccc;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #e9ecef; 
+            margin: 0; 
+            padding: 2rem 0; 
+            font-size: 10pt; 
+            color: #343a40; 
+            line-height: 1.5; 
+        }
+
+        .action-buttons {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .action-button {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+            color: #333;
+        }
+
+        .action-button:hover {
+            background-color: #f1f1f1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .page { 
+            background: white; 
+            width: 210mm; 
+            margin: 1rem auto; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.1); 
+            min-height: 297mm;
+            position: relative;
+        }
+        .content-wrapper { 
+            padding: 18mm 8mm;
+        }
+
+        @media print { 
+            body { 
+                padding: 0; 
+                margin: 0;
+                background-color: #fff;
+            } 
+            .page { 
+                box-shadow: none; 
+                margin: 0; 
+                min-height: 0;
+                page-break-after: always;
+            }
+             .page:last-of-type {
+                page-break-after: auto;
+            }
+            .action-buttons {
+                display: none;
+            }
+        }
+
+        strong { 
+            font-weight: 600; 
+            color: var(--text-dark); 
+        }
+        /* Header */
+        .header { 
+            display: flex; 
+            justify-content: space-between;
+            align-items: flex-start; 
+            gap: 1.5rem; 
+            padding-bottom: 1rem; 
+            border-bottom: 2px solid var(--primary-color); 
+        }
+        .header-main {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .profile-pic { 
+            width: 110px; 
+            height: 110px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 3px solid var(--primary-color); 
+            flex-shrink: 0; 
+        }
+        .header-text h1 { 
+            font-size: 2rem; 
+            font-weight: 700; 
+            color: var(--text-dark); 
+            margin: 0; 
+        }
+        .header-text .subtitle { 
+            font-size: 1.1rem; 
+            font-weight: 500; 
+            color: var(--primary-color); 
+            margin: 0.25rem 0 0.5rem 0; 
+        }
+        .contact-info { 
+            font-size: 9pt; 
+            color: var(--text-light); 
+        }
+        .contact-info a { 
+            color: var(--text-light); 
+            text-decoration: none; 
+        }
+        .qr-code-header {
+            text-align: center;
+        }
+        .qr-code-header a.qr-link-wrapper {
+            display: inline-block;
+            text-decoration: none;
+        }
+        .qr-code-header img { 
+            width: 80px; 
+            height: 80px; 
+        }
+        .qr-code-header .qr-link-text {
+            font-size: 8pt;
+            color: var(--primary-color);
+            margin-top: 0.5rem;
+            line-height: 1.3;
+        }
+        .qr-code-header a.qr-link-wrapper:hover .qr-link-text {
+            text-decoration: underline;
+        }
+
+        /* Sections */
+        .section { 
+            margin-top: 1.5rem; 
+        }
+        h2 { 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            color: var(--primary-color); 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em; 
+            border-bottom: 1px solid var(--line-color); 
+            padding-bottom: 0.25rem; 
+            margin-bottom: 1rem; 
+        }
+        /* Competencies & Skills */
+        .skills-list {
+            padding-left: 1.2em;
+            margin: 0;
+            list-style-type: disc;
+            columns: 2;
+            gap: 2rem;
+        }
+        .skills-list li {
+            font-size: 9.5pt;
+            padding-left: 0.5em;
+            margin-bottom: 0.3rem;
+            page-break-inside: avoid;
+        }
+        .skills-list li::marker {
+            color: var(--primary-color);
+        }
+        
+        /* TIMELINE */
+        .timeline {
+             list-style: none;
+             padding: 0;
+             margin-top: 1rem;
+        }
+        .timeline-item {
+            display: flex;
+            position: relative;
+            padding-bottom: 1.5rem;
+            page-break-inside: avoid;
+        }
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        .timeline-marker {
+            flex-shrink: 0;
+            width: 11px;
+            margin-right: 1.5rem;
+            position: relative;
+        }
+        .timeline-marker::before { 
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 6px; 
+            width: 11px;
+            height: 11px;
+            background-color: var(--timeline-line-color);
+            border-radius: 50%;
+            z-index: 2;
+        }
+        .timeline-item .timeline-marker::after { 
+            content: '';
+            position: absolute;
+            left: 5px; 
+            top: 22px; 
+            width: 1px;
+            height: calc(100% - 10px); 
+            background-color: var(--timeline-line-color);
+            z-index: 1;
+        }
+         .timeline-item:first-child .timeline-marker::after {
+            top: 22px;
+        }
+        .timeline-content {
+            flex-grow: 1;
+        }
+        .job-title { 
+            font-size: 1rem; 
+            font-weight: 600; 
+            color: var(--text-dark); 
+            margin: 0;
+        }
+        .company { 
+            font-size: 0.9rem; 
+            color: var(--text-light); 
+            margin-top: 0.1rem;
+        }
+        .timeline-content ul { 
+            list-style-type: disc;
+            padding-left: 1.5em; 
+            margin: 0.5rem 0 0 0; 
+        }
+        .timeline-content li { 
+            padding-left: 0.5em; 
+            margin-bottom: 0.25rem; 
+        }
+         .timeline-content li::marker { 
+            color: var(--primary-color); 
+        }
+        .key-results { 
+            font-size: 9pt; 
+            background-color: var(--bg-light); 
+            border-radius: 4px;
+            padding: 0.5rem 0.75rem; 
+            margin-top: 0.75rem; 
+        }
+        .key-results-title {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        /* Two-Column-Grid */
+        .grid-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            page-break-before: auto;
+            margin-top: 2.5rem; 
+        }
+        .grid-section ul {
+            list-style-type: disc;
+            padding-left: 1.5em; 
+            margin-top: 0;
+        }
+         .grid-section li {
+            padding-left: 0.5em;
+        }
+        .grid-section li::marker {
+             color: var(--primary-color);
+        }
+        /* Footer */
+        .footer { 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Aligned to the left */
+            margin-top: 2rem; 
+            padding-top: 1rem; 
+            border-top: 1px solid var(--line-color); 
+            font-size: 9pt; 
+            color: var(--text-light); 
+        }
+        .signature-block {
+            text-align: left; /* Aligned to the left */
+            margin-top: 1rem;
+        }
+        .signature-block img { 
+            height: 40px; 
+        }
+        .signature-block p {
+            margin-top: 0.1rem;
+        }
+
+        /* Language-specific styles */
+        .lang-en {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="action-buttons">
+        <button class="action-button" onclick="setLanguage()" title="Sprache wechseln / Change language">
+            <i class="material-icons">language</i>
+        </button>
+        <button class="action-button" onclick="window.print()" title="Drucken / Print">
+            <i class="material-icons">print</i>
+        </button>
+    </div>
+
+    <div class="page">
+        <div class="content-wrapper">
+            <header class="header">
+                 <div class="header-main">
+                    <img src="https://placehold.co/110x110/0070D2/FFFFFF?text=Bewerber" alt="Profilbild" class="profile-pic">
+                    <div class="header-text">
+                        <h1>Max Mustermann</h1>
+                        <p class="subtitle">
+                            <span class="lang-de">Program Owner & Solution Manager</span>
+                            <span class="lang-en">Program Owner & Solution Manager</span>
+                        </p>
+                        <div class="contact-info">
+                            <span>Musterstraße 1, 12345 Musterstadt</span><br>
+                            <a href="mailto:max.mustermann@email.de">max.mustermann@email.de</a><br>
+                            <span>+49 123 456789</span>
+                        </div>
+                    </div>
+                 </div>
+                 <div class="qr-code-header">
+                    <a href="#" target="_blank" class="qr-link-wrapper">
+                        <img src="https://placehold.co/80x80/ffffff/000000?text=QR" alt="QR Code" onerror="this.style.display='none'">
+                        <p class="qr-link-text">
+                            <span class="lang-de">Link zum Online-Profil<br>oder weiteren Details</span>
+                            <span class="lang-en">Link to online profile<br>or further details</span>
+                        </p>
+                    </a>
+                </div>
+            </header>
+            <main>
+                <section class="section">
+                    <h2>
+                        <span class="lang-de">Kurzprofil</span>
+                        <span class="lang-en">Profile</span>
+                    </h2>
+                    <p>
+                        <span class="lang-de">Als erfahrener <strong>Program Owner & Solution Manager</strong> und ausgewiesener <strong>Automotive CRM-Experte</strong> mit insgesamt über <strong>22 Jahren Branchenerfahrung</strong> gestalte ich seit über <strong>6 Jahren erfolgreich mit Salesforce</strong> die digitale Transformation von CRM und Sales Prozessen bei Mercedes-Benz.</span>
+                        <span class="lang-en">As an experienced <strong>Program Owner & Solution Manager</strong> and proven <strong>Automotive CRM Expert</strong> with over <strong>22 years of industry experience</strong>, I have been successfully shaping the digital transformation of CRM and sales processes at Mercedes-Benz with Salesforce for over <strong>6 years</strong>.</span>
+                    </p>
+                    <p>
+                        <span class="lang-de">Meine Kernkompetenz liegt in der <strong>strategischen Führung, Lösungsgestaltung und Implementierung komplexer, europaweiter Salesforce-basierter CRM-Programme</strong> (Sales, Service, Marketing, Experience & Data Cloud). Diese Lösungen unterstützen flexibel <strong>diverse Vertriebsmodelle (Agentur & Retail)</strong>, decken <strong>Sales, After Sales & Finance Use Cases</strong> ab und sind tief in POS-Systeme integriert (Fokus Sales Activities & Point of Sale), Ziel <strong>>10.000 Anwender</strong>.</span>
+                        <span class="lang-en">My core competence lies in the <strong>strategic leadership, solution design, and implementation of complex, Europe-wide Salesforce-based CRM programs</strong> (Sales, Service, Marketing, Experience & Data Cloud). These solutions flexibly support <strong>various sales models (agency & retail)</strong>, cover <strong>Sales, After Sales & Finance Use Cases</strong>, and are deeply integrated into POS systems (focus Sales Activities & Point of Sale), targeting <strong>>10,000 users</strong>.</span>
+                    </p>
+                    <p>
+                        <span class="lang-de">Ich verbinde <strong>Automotive-Expertise mit agiler Produktentwicklung</strong>, dem Einsatz innovativer Technologien (inkl. KI-Lösungen wie Salesforce Agentforce) und der <strong>Leitung anspruchsvoller Transitionsprojekte</strong> ganzer Entwicklungsmannschaften <strong>mit signifikanter Effizienzsteigerung</strong> (ca. 40%). Fokus: Schaffung einer <strong>standardisierten, harmonisierten europäischen CRM-Landschaft</strong> für zukünftige Marktanforderungen und exzellente Kundenerlebnisse.</span>
+                        <span class="lang-en">I combine <strong>Automotive Expertise with agile product development</strong>, the use of innovative technologies (including AI solutions like Salesforce Agentforce), and the <strong>leadership of demanding transition projects</strong> for entire development teams <strong>with significant efficiency increases</strong> (approx. 40%). Focus: Creation of a <strong>standardized, harmonized European CRM landscape</strong> for future market requirements and excellent customer experiences.</span>
+                    </p>
+                </section>
+                <section class="section">
+                    <h2>
+                        <span class="lang-de">Kernkompetenzen</span>
+                        <span class="lang-en">Core Competencies</span>
+                    </h2>
+                    <ul class="skills-list">
+                        <li>Agile Program & Transition Management</li>
+                        <li>Stakeholder Management & Kommunikation</li>
+                        <li>Lösungsarchitektur & Solution Management</li>
+                        <li>Automotive CRM & Digitale Transformation</li>
+                        <li>Salesforce Platform Leadership</li>
+                        <li>KI im CRM (z.B. Salesforce Agentforce)</li>
+                    </ul>
+                </section>
+                <section class="section">
+                      <h2>
+                          <span class="lang-de">Berufserfahrung</span>
+                          <span class="lang-en">Professional Experience</span>
+                      </h2>
+                      <ol class="timeline">
+                          <li class="timeline-item">
+                              <div class="timeline-marker"></div>
+                              <div class="timeline-content">
+                                  <p class="job-title">
+                                      <span class="lang-de">Solution Manager & Program Owner Mercedes-Benz CRM</span>
+                                      <span class="lang-en">Solution Manager & Program Owner Mercedes-Benz CRM</span>
+                                  </p>
+                                  <p class="company">
+                                      <span class="lang-de">Mercedes-Benz AG, MX/DAC, Stuttgart | 03/2023 – aktuell</span>
+                                      <span class="lang-en">Mercedes-Benz AG, MX/DAC, Stuttgart | 03/2023 – Present</span>
+                                  </p>
+                                  <ul>
+                                      <li>
+                                          <span class="lang-de"><strong>Strategische CRM-Programmführung (Salesforce):</strong> Gesamtverantwortung für die europaweite MB CRM-Landschaft (Strategie, Architektur, Entwicklung) für Retail/Agenturmodelle & Sales/After Sales/Finance Use Cases (Fokus Sales Activities & Point of Sale), Ziel >10.000 Anwender.</span>
+                                          <span class="lang-en"><strong>Strategic Salesforce CRM Program Leadership (Europe-wide):</strong> Overall responsibility for the MB CRM landscape (strategy, architecture, development) for agency/retail models & Sales/After Sales/Finance use cases (focus Sales Activities & Point of Sale), targeting >10,000 users.</span>
+                                      </li>
+                                      <li>
+                                          <span class="lang-de"><strong>Salesforce Solution Design & KI-Implementierung (Agentforce):</strong> Lösungsverantwortung für Salesforce CRM; Förderung & Pilotierung von KI (inkl. GenAI/PredAI Use Cases mit HS Aachen) zur Effizienz- & Qualitätssteigerung sowie Prozess- & <strong>Datenqualitätsoptimierung</strong>.</span>
+                                          <span class="lang-en"><strong>Salesforce CRM Solution Design & AI Implementation (Agentforce):</strong> Solution ownership for Salesforce CRM; drove AI promotion & piloting (incl. GenAI/PredAI use cases with HS Aachen) for enhanced efficiency and quality, as well as process and <strong>data quality optimization</strong>.</span>
+                                      </li>
+                                      <li>
+                                          <span class="lang-de"><strong>Leitung organisatorische Transition & Effizienzsteigerung (~40%)</strong> der MB CRM Entwicklungsmannschaft (extern zu intern), inkl. Change Management.</span>
+                                          <span class="lang-en"><strong>Led MB CRM Development Team Transition & Efficiency Increase (~40%):</strong> Managed shift from external to internal, including change management.</span>
+                                      </li>
+                                      <li>
+                                          <span class="lang-de"><strong>Stakeholder Management (bis Top-Management):</strong> Proaktives Erwartungsmanagement, Übersetzung von Business-Anforderungen in technische Roadmaps, Verantwortung für das <strong>Management Reporting</strong> sowie Aufbau und Überführung des <strong>Programm-Risikomanagements</strong>.</span>
+                                          <span class="lang-en"><strong>Stakeholder Management (up to Top-Management):</strong> Proactively managed expectations, translated business requirements into technical roadmaps, responsible for <strong>management reporting</strong>, and established and transitioned <strong>program risk management</strong>.</span>
+                                      </li>
+                                  </ul>
+                                   <div class="key-results">
+                                      <span class="key-results-title">Key Results:</span>
+                                      <span class="lang-de"> Etablierung einer zukunftsfähigen, europaweit standardisierten CRM-Plattform für Agilität in Vertriebsmodellen, tiefe POS-Integration und datengetriebene Kundenzentrierung.</span>
+                                      <span class="lang-en"> Establishment of a future-proof, Europe-wide standardized CRM platform for agility in sales models, deep POS integration, and data-driven customer centricity.</span>
+                                  </div>
+                              </div>
+                          </li>
+                          <li class="timeline-item">
+                              <div class="timeline-marker"></div>
+                              <div class="timeline-content">
+                                  <p class="job-title">Product Owner OneCRM (Salesforce Sales, Service, Marketing & Experience Cloud)</p>
+                                  <p class="company">
+                                      <span class="lang-de">Mercedes-Benz AG, ITS/DC, Stuttgart | 01/2018 – 02/2023</span>
+                                      <span class="lang-en">Mercedes-Benz AG, ITS/DC, Stuttgart | 01/2018 – 02/2023</span>
+                                  </p>
+                                   <ul>
+                                      <li>
+                                          <span class="lang-de"><strong>Europaweite Salesforce CRM-Implementierung & Skalierung:</strong> Leitung der Einführung von OneCRM für <strong>>3.000 Nutzer in 12 europäischen Märkten</strong> (Retail, After Sales), inkl. Ablösung von >8 Legacy-Systemen mit signifikanter Kosten- & Komplexitätsreduktion.</span>
+                                          <span class="lang-en"><strong>Europe-wide Salesforce CRM Implementation & Scaling:</strong> Led the introduction of OneCRM for <strong>>3,000 users in 12 European markets</strong> (Retail, After Sales), incl. replacement of >8 legacy systems with significant cost & complexity reduction.</span>
+                                      </li>
+                                      <li>
+                                          <span class="lang-de"><strong>Agile Teamführung & Transformation:</strong> Aufbau & Leitung internationaler Salesforce-Entwicklungsteams (bis zu 100 Mitglieder, davon ~50 MA in direkter technischer Leitung) unter Anwendung agiler Methoden (Scrum, Kanban) und Salesforce Best Practices.</span>
+                                          <span class="lang-en"><strong>Agile Team Leadership & Transformation:</strong> Built & led international Salesforce development teams (up to 100 members, with ~50 employees in direct technical leadership) using agile methods (Scrum, Kanban) and Salesforce Best Practices.</span>
+                                      </li>
+                                      <li>
+                                          <span class="lang-de"><strong>Technische Lösungsverantwortung & Prozessharmonisierung:</strong> Verantwortung für die Entwicklung einer skalierbaren Multi-Cloud Salesforce-Architektur (inkl. Data Cloud) sowie Vereinheitlichung von Vertriebs-, Service- & After Sales Prozessen (SAM-Grundlagen).</span>
+                                          <span class="lang-en"><strong>Technical Solution Ownership & Process Harmonization:</strong> Responsible for developing a scalable multi-cloud Salesforce architecture (incl. Data Cloud) and standardizing sales, service & after-sales processes (SAM fundamentals).</span>
+                                      </li>
+                                       <li>
+                                          <span class="lang-de">Eigenständiger Aufbau, Implementierung und Übergabe des <strong>Application Management Service (AMS)</strong> in die Linienfunktion.</span>
+                                          <span class="lang-en">Independent setup, implementation, and handover of the <strong>Application Management Service (AMS)</strong> to the line function.</span>
+                                      </li>
+                                      <li>
+                                          <span class="lang-de">Entwicklung, Implementierung und Verantwortung des gesamten <strong>Lifecycle-Managements</strong> für MB CRM.</span>
+                                          <span class="lang-en">Development, implementation, and responsibility for the entire <strong>lifecycle management</strong> for MB CRM.</span>
+                                      </li>
+                                  </ul>
+                                   <div class="key-results">
+                                      <span class="key-results-title">Key Results:</span>
+                                      <span class="lang-de"> Schaffung einer 360°-Kundensicht; Steigerung Vertriebseffizienz & Lead-Conversion-Rate.</span>
+                                      <span class="lang-en"> Creation of a 360° customer view; increased sales efficiency & lead conversion rate.</span>
+                                  </div>
+                              </div>
+                          </li>
+                           <li class="timeline-item">
+                               <div class="timeline-marker"></div>
+                               <div class="timeline-content">
+                                   <p class="job-title">
+                                       <span class="lang-de">Projektleitung und Requirements Engineer – oCRM Frankreich</span>
+                                       <span class="lang-en">Project Lead and Requirements Engineer – oCRM France</span>
+                                    </p>
+                                    <p class="company">
+                                       <span class="lang-de">Daimler AG, ITS/MC, Stuttgart | 01/2017 – 12/2017</span>
+                                       <span class="lang-en">Daimler AG, ITS/MC, Stuttgart | 01/2017 – 12/2017</span>
+                                    </p>
+                                     <ul>
+                                      <li>
+                                          <span class="lang-de">Technische <strong>Projektleitung</strong> oCRM Frankreich; <strong>Kampagnen Management mit Oracle Siebel</strong> (Bestandteil von oCRM (= Kampagnentool für Mercedes-Benz)) initial als Standard implementiert (dazu auch die <strong>Massendatenmigration</strong> aus Legacy-Systemen).</span>
+                                          <span class="lang-en">Technical <strong>project management</strong> for oCRM France; Initially implemented <strong>campaign management with Oracle Siebel</strong> (part of oCRM (= campaign tool for Mercedes-Benz)) as standard (including <strong>mass data migration</strong> from legacy systems).</span>
+                                        </li>
+                                  </ul>
+                                   <div class="key-results">
+                                      <span class="key-results-title">Key Results:</span>
+                                      <span class="lang-de"> Erfolgreiches Enablement oCRM Frankreich; Sicherstellung Datenverfügbarkeit und standardisiertes Kampagnenmanagement.</span>
+                                      <span class="lang-en"> Successful enablement of oCRM France; ensured data availability and standardized campaign management.</span>
+                                  </div>
+                              </div>
+                          </li>
+                           <li class="timeline-item">
+                              <div class="timeline-marker"></div>
+                               <div class="timeline-content">
+                                  <p class="job-title">
+                                      <span class="lang-de">Business Architekt – Fachdesign und Spezifikation Retail Systeme</span>
+                                      <span class="lang-en">Business Architect – Functional Design and Specification Retail Systems</span>
+                                </p>
+                                  <p class="company">
+                                      <span class="lang-de">Daimler AG, MS/MER, Stuttgart | 08/2014 – 12/2016</span>
+                                      <span class="lang-en">Daimler AG, MS/MER, Stuttgart | 08/2014 – 12/2016</span>
+                                </p>
+                                  <ul>
+                                      <li>
+                                          <span class="lang-de">Fachliche <strong>Leitung CRM Integration Group</strong>; Harmonisierung MBC POS (= digitaler Verkäuferarbeitsplatz der Zukunft bei Mercedes-Benz) in heterogene CRM Landschaften.</span>
+                                          <span class="lang-en">Functional <strong>lead for CRM Integration Group</strong>; harmonization of MBC POS (= digital salesperson workstation of the future at Mercedes-Benz) into heterogeneous CRM landscapes.</span>
+                                        </li>
+                                      <li>
+                                          <span class="lang-de">Fachdesign <strong>Sales Activity & Lead Management</strong> für MBC POS (internationale Rollouts).</span>
+                                          <span class="lang-en">Functional design of <strong>Sales Activity & Lead Management</strong> for MBC POS (international rollouts).</span>
+                                        </li>
+                                  </ul>
+                                   <div class="key-results">
+                                      <span class="key-results-title">Key Results:</span>
+                                      <span class="lang-de"> Konsistente CRM-Prozesse im Retail; verbesserte Nutzerakzeptanz MBC POS.</span>
+                                      <span class="lang-en"> Consistent CRM processes in retail; improved user acceptance of MBC POS.</span>
+                                  </div>
+                              </div>
+                          </li>
+                           <li class="timeline-item">
+                              <div class="timeline-marker"></div>
+                               <div class="timeline-content">
+                                  <p class="job-title">
+                                      <span class="lang-de">Customer Contact Center Strategie</span>
+                                      <span class="lang-en">Customer Contact Center Strategy</span>
+                                  </p>
+                                  <p class="company">
+                                      <span class="lang-de">Automotive Training & Consulting GmbH (für Daimler AG) | 06/2013 – 07/2014</span>
+                                      <span class="lang-en">Automotive Training & Consulting GmbH (for Daimler AG) | 06/2013 – 07/2014</span>
+                                  </p>
+                                  <ul>
+                                      <li>
+                                          <span class="lang-de">Entwicklung einer Strategie zur Optimierung der zentralen <strong>Customer Contact Center</strong> (CCC) mit dem Ziel, die Kundenzufriedenheit signifikant zu erhöhen (internes Projekt: 'MBC2020' – Best Customer Experience); <strong>globale Anwendbarkeit und Umsetzung der Strategie</strong>.</span>
+                                          <span class="lang-en">Development of a strategy to optimize central <strong>Customer Contact Center</strong> (CCC) with the aim of significantly increasing customer satisfaction (internal project: 'MBC2020' – Best Customer Experience); <strong>global applicability and implementation of the strategy</strong>.</span>
+                                    </li>
+                                  </ul>
+                                   <div class="key-results">
+                                      <span class="key-results-title">Key Results:</span>
+                                      <span class="lang-de"> Strategisches Konzept für globale Kundenkontaktprozesse als Pilotierungsbasis.</span>
+                                      <span class="lang-en"> Strategic concept for global customer contact processes as a basis for piloting.</span>
+                                  </div>
+                              </div>
+                          </li>
+                           <li class="timeline-item">
+                               <div class="timeline-marker"></div>
+                               <div class="timeline-content">
+                                  <p class="job-title">BDC Enablement, Governance and Measurement</p>
+                                  <p class="company">
+                                      <span class="lang-de">Automotive Training & Consulting GmbH (für Daimler AG) | 01/2011 – 05/2013</span>
+                                      <span class="lang-en">Automotive Training & Consulting GmbH (for Daimler AG) | 01/2011 – 05/2013</span>
+                                   </p>
+                                   <ul>
+                                      <li>
+                                          <span class="lang-de">Internationale <strong>Markt Readiness</strong> Analysen & Rolloutbegleitung <strong>Business Development Center</strong> (BDC), <strong>u.a. Fokusmarkt China</strong>.</span>
+                                          <span class="lang-en">International <strong>market readiness</strong> analyses & rollout support for <strong>Business Development Centers</strong> (BDC), <strong>including focus market China</strong>.</span>
+                                        </li>
+                                      <li>
+                                          <span class="lang-de">Verantwortung für das gesamte <strong>Reporting</strong>: Aufbau und Entwicklung von Dashboards, KPI-Reports und Management-Präsentationen zur Erfolgsmessung der BDC-Aktivitäten.</span>
+                                          <span class="lang-en">Responsibility for all <strong>reporting</strong>: Setup and development of dashboards, KPI reports, and management presentations to measure the success of BDC activities.</span>
+                                    </li>
+                                  </ul>
+                                   <div class="key-results">
+                                      <span class="key-results-title">Key Results:</span>
+                                      <span class="lang-de"> Erfolgreiche Pilotierung/Implementierung von LMS & BDC-Strukturen international; Etablierung eines transparenten Performance-Monitorings.</span>
+                                      <span class="lang-en"> Successful piloting/implementation of LMS & BDC structures internationally; Establishment of transparent performance monitoring.</span>
+                                  </div>
+                              </div>
+                          </li>
+                          <li class="timeline-item">
+                              <div class="timeline-marker"></div>
+                              <div class="timeline-content">
+                                  <p class="job-title">
+                                      <span class="lang-de">Business Development Center (BDC) & Lead Management Systeme (LMS)</span>
+                                      <span class="lang-en">Business Development Center (BDC) & Lead Management Systems (LMS)</span>
+                                    </p>
+                                  <p class="company">
+                                      <span class="lang-de">Daimler Protics GmbH (für Daimler AG) | 04/2005 – 12/2010</span>
+                                      <span class="lang-en">Daimler Protics GmbH (for Daimler AG) | 04/2005 – 12/2010</span>
+                                  </p>
+                                   <ul>
+                                       <li>
+                                           <span class="lang-de">Entwicklung, Konzeption und Rollout-Sicherung von <strong>Business Development Center</strong> (BDC)-Vertriebskanälen und Sales <strong>Lead Management Systemen</strong> (LMS).</span>
+                                           <span class="lang-en">Development, conception, and rollout assurance of <strong>Business Development Center</strong> (BDC) sales channels and Sales <strong>Lead Management Systems</strong> (LMS).</span>
+                                        </li>
+                                      <li>
+                                          <span class="lang-de">Übernahme internationaler <strong>Projektleitung</strong> für BDC- & LMS-Rollouts (Fokus Europa & Übersee) als Senior Consultant.</span>
+                                          <span class="lang-en">Assumption of international <strong>project leadership</strong> for BDC & LMS rollouts (focus Europe & overseas) as Senior Consultant.</span>
+                                        </li>
+                                      <li>
+                                          <span class="lang-de">Strategische Beratung zur Prozessoptimierung im <strong>Lead-to-Sales-Funnel</strong>.</span>
+                                          <span class="lang-en">Strategic consulting for process optimization in the <strong>lead-to-sales funnel</strong>.</span>
+                                        </li>
+                                      <li>
+                                          <span class="lang-de">Konzeption und Pilotierung des BDC-Ansatzes für den <strong>After Sales Bereich</strong> zur Steigerung der Kundenbindung und Service-Umsätze.</span>
+                                          <span class="lang-en">Conception and piloting of the BDC approach for the <strong>After Sales area</strong> to increase customer loyalty and service revenue.</span>
+                                        </li>
+                                      <li>
+                                          <span class="lang-de">Aufbau eines umfassenden <strong>Support-Konzepts</strong> inklusive 2nd und 3rd Level Support.</span>
+                                          <span class="lang-en">Establishment of a comprehensive <strong>support concept</strong> including 2nd and 3rd level support.</span>
+                                        </li>
+                                  </ul>
+                                  <div class="key-results">
+                                      <span class="key-results-title">Key Results:</span>
+                                      <span class="lang-de"> Professionalisierung der BDC-Kanäle (Sales & After Sales) und Etablierung standardisierter, internationaler Lead Management Prozesse.</span>
+                                      <span class="lang-en"> Professionalization of BDC channels (Sales & After Sales) and establishment of standardized, international lead management processes.</span>
+                                  </div>
+                              </div>
+                          </li>
+                      </ol>
+                </section>
+                 <div class="grid-section">
+                    <section>
+                        <h2>
+                            <span class="lang-de">Qualifizierung</span>
+                            <span class="lang-en">Qualification</span>
+                        </h2>
+                        <p>
+                            <strong>
+                                <span class="lang-de">Studium „Betriebswirtschaftslehre“</span>
+                                <span class="lang-en">Studies in "Business Administration"</span>
+                            </strong><br>
+                            <span class="lang-de">Hochschule Nürtingen (Diplom-Betriebswirt)</span>
+                            <span class="lang-en">Nuertingen University (Diplom-Betriebswirt)</span>
+                        </p>
+                        <p>
+                            <strong>
+                                <span class="lang-de">Kaufmännische Ausbildung</span>
+                                <span class="lang-en">Commercial Training</span>
+                            </strong><br>
+                            <span class="lang-de">Landesbank Baden-Württemberg (Finanzassistent)</span>
+                            <span class="lang-en">Landesbank Baden-Württemberg (Financial Assistant)</span>
+                        </p>
+                    </section>
+                     <section>
+                        <h2>
+                            <span class="lang-de">Zertifikate (Auszug)</span>
+                            <span class="lang-en">Certificates (Excerpt)</span>
+                        </h2>
+                        <ul>
+                            <li><strong>SCRUM</strong> Product Owner</li>
+                            <li>European Business <strong>Coach</strong> (EBC)</li>
+                            <li>Senior <strong>Process Manager</strong> (SPCM)</li>
+                            <li>
+                                <span class="lang-de"><strong>Projektmanagement</strong>-Fachmann (IPMA)</span>
+                                <span class="lang-en"><strong>Project Management</strong> Professional (IPMA)</span>
+                            </li>
+                        </ul>
+                    </section>
+                 </div>
+                 <div class="grid-section">
+                    <section>
+                        <h2>
+                            <span class="lang-de">Sprachen</span>
+                            <span class="lang-en">Languages</span>
+                        </h2>
+                        <ul>
+                            <li>
+                                <span class="lang-de"><strong>Deutsch:</strong> Muttersprache</span>
+                                <span class="lang-en"><strong>German:</strong> Native</span>
+                            </li>
+                            <li>
+                                <span class="lang-de"><strong>Englisch:</strong> Verhandlungssicher</span>
+                                <span class="lang-en"><strong>English:</strong> Business Fluent</span>
+                            </li>
+                            <li>
+                                <span class="lang-de"><strong>Französisch:</strong> Erweiterte Grundkenntnisse</span>
+                                <span class="lang-en"><strong>French:</strong> Advanced Basic Knowledge</span>
+                            </li>
+                        </ul>
+                    </section>
+                     <section>
+                        <h2>
+                            <span class="lang-de">Interessen</span>
+                            <span class="lang-en">Interests</span>
+                        </h2>
+                        <ul>
+                            <li>
+                                <span class="lang-de">Familie & Sport (Laufen, Fitness)</span>
+                                <span class="lang-en">Family & Sports (Running, Fitness)</span>
+                            </li>
+                            <li>
+                                <span class="lang-de">Digitale Innovation, IoT & KI</span>
+                                <span class="lang-en">Digital Innovation, IoT & AI</span>
+                            </li>
+                            <li>
+                                <span class="lang-de">Wandern & Fotografie</span>
+                                <span class="lang-en">Hiking & Photography</span>
+                            </li>
+                        </ul>
+                    </section>
+                 </div>
+                 <footer class="footer">
+                    <p>
+                        <span class="lang-de">Musterstadt, den 26.07.2025</span>
+                        <span class="lang-en">Musterstadt, July 26, 2025</span>
+                    </p>
+                    <div class="signature-block">
+                         <img src="https://placehold.co/150x50/ffffff/000000?text=Unterschrift" alt="Unterschrift" onerror="this.style.display='none';">
+                        <p>Max Mustermann</p>
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'de';
+
+        function setLanguage() {
+            const newLang = currentLanguage === 'de' ? 'en' : 'de';
+            
+            const deElements = document.querySelectorAll('.lang-de');
+            const enElements = document.querySelectorAll('.lang-en');
+
+            if (newLang === 'en') {
+                deElements.forEach(el => el.style.display = 'none');
+                enElements.forEach(el => el.style.display = 'inline'); // or 'block' etc. depending on element
+                document.documentElement.lang = 'en';
+            } else {
+                deElements.forEach(el => el.style.display = 'inline');
+                enElements.forEach(el => el.style.display = 'none');
+                document.documentElement.lang = 'de';
+            }
+            
+            // Adjust display for block elements like paragraphs
+            document.querySelectorAll('p > .lang-en, p > .lang-de, li > .lang-en, li > .lang-de, h2 > .lang-en, h2 > .lang-de, strong > .lang-en, strong > .lang-de').forEach(el => {
+                if (el.style.display === 'inline') {
+                    // Check parent node to apply correct display style
+                    if (el.parentElement.nodeName === 'P' || el.parentElement.nodeName === 'H2' || el.parentElement.nodeName === 'LI' || el.parentElement.nodeName === 'STRONG') {
+                         el.style.display = 'block';
+                    }
+                }
+            });
+
+
+            currentLanguage = newLang;
+        }
+
+        // Initialize with German
+        document.addEventListener('DOMContentLoaded', () => {
+            const enElements = document.querySelectorAll('.lang-en');
+            enElements.forEach(el => el.style.display = 'none');
+            
+            // Ensure correct initial display for block elements
+            document.querySelectorAll('p > .lang-de, li > .lang-de, h2 > .lang-de, strong > .lang-de').forEach(el => {
+                el.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>
